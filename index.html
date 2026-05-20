@@ -1,3 +1,5 @@
+--- START OF FILE Paste May 20, 2026 - 11:44AM ---
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -529,7 +531,7 @@
         <div class="modal-content">
             <div class="modal-img-wrapper" id="modal-wrapper">
                 <img id="modal-img" src="" alt="">
-                <iframe id="modal-video" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <iframe id="modal-video" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 
                 <div class="modal-nav">
                     <button class="nav-btn" id="prev-btn">←</button>
@@ -718,6 +720,19 @@
             updateLightbox();
         }
 
+        // FUNÇÃO DE CONVERSÃO DE URL DO YOUTUBE PARA EMBED
+        function getYoutubeEmbedUrl(url) {
+            let videoId = "";
+            if (url.includes("youtu.be/")) {
+                videoId = url.split("youtu.be/")[1].split(/[?#]/)[0];
+            } else if (url.includes("youtube.com/shorts/")) {
+                videoId = url.split("shorts/")[1].split(/[?#]/)[0];
+            } else if (url.includes("v=")) {
+                videoId = url.split("v=")[1].split(/[&#]/)[0];
+            }
+            return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+        }
+
         function updateLightbox() {
             const img = document.getElementById('modal-img');
             const video = document.getElementById('modal-video');
@@ -732,7 +747,8 @@
 
             if (currentData.type === "video") {
                 video.style.display = "block";
-                video.src = currentData.videos[currentProjectIdx];
+                // APLICAÇÃO DA CONVERSÃO AUTOMÁTICA
+                video.src = getYoutubeEmbedUrl(currentData.videos[currentProjectIdx]);
             } else {
                 img.style.display = "block";
                 img.src = currentData.images[currentProjectIdx];
